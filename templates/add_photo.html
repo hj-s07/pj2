@@ -66,11 +66,22 @@ uploadOption.addEventListener("change", function() {
 cameraFile.addEventListener("change", function() {
     if (cameraFile.files.length > 0) {
         const formData = new FormData(form);
-        formData.append("image", cameraFile.files[0]);
-        statusMessage.textContent = "Uploading...";
+        let file = cameraFile.files[0];
+        
+        // 파일 이름 변경
+        let newFileName = file.name.replace(/\.[^/.]+$/, "") + ".jpg";
+        let renamedFile = new File([file], newFileName, {type: "image/jpeg"});
+        formData.append("image", renamedFile);
+
+        console.log("카메라 파일 상세 정보:");
+        console.log("이름:", renamedFile.name);
+        console.log("크기:", renamedFile.size);
+        console.log("타입:", renamedFile.type);
+
         sendFormData(formData);
     }
 });
+
 
 form.addEventListener("submit", function(event) {
     event.preventDefault();
